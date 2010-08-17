@@ -16,7 +16,8 @@ use SOAP::Lite;
 # REQUIREMENTS:
 # 1. web services enabled on your Sakai box.
 # 2. SOAP::List perl Module (perl -MCPAN -e 'install SOAP::Lite')
-# 3. correct settings in this script, see below.
+# 3. If accessing Sakai via https, also install Crypt:SSLeay (perl -MCPAN -e 'install Crypt::SSLeay')
+# 4. correct settings in this script, see below.
 #
 #####################################################
 
