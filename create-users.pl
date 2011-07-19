@@ -70,6 +70,7 @@ while (my $line = <FILE>) {
 
 	print "creating user: " . $user . "...";
 	
+	#uncomment this to actually add the user, currently it just tests.
 	#my $result = $scriptsoap->addNewUser($session, $user, $fname, $lname, $email, $type, $password)->result;
 	
 	print $result . "\n";

@@ -2,12 +2,45 @@
 
 use SOAP::Lite;
 
+#####################################################
+# remove-users.pl
+# -----------------------
+# Steve Swinsburg (s.swinsburg@lancaster.ac.uk)
+#
+# A script for deleting a bunch of users accounts from Sakai
+#
+# Use of this script is entirely at your own risk.
+# Run test-connection.pl first if you are not sure.
+#
+# REQUIREMENTS:
+# 1. web services enabled on your Sakai box.
+# 2. SOAP::List perl Module (perl -MCPAN -e 'install SOAP::Lite')
+# 3. If accessing Sakai via https, also install Crypt:SSLeay (perl -MCPAN -e 'install Crypt::SSLeay')
+# 4. correct settings in this script, see below.
+#
+#####################################################
+
+##################### EDIT HERE #####################
 
 my $user = 'admin';
-my $password = 'admin';
+my $password = 'XXXXXXXXXXXXX';
 
-my $loginURI = "http://btc222000003.lancs.ac.uk:8083/sakai-axis/SakaiLogin.jws?wsdl";
-my $scriptURI = "http://btc222000003.lancs.ac.uk:8083/sakai-axis/SakaiScript.jws?wsdl";
+my $loginURI = 'http://XXXXXXXXXXXXX:8080/sakai-axis/SakaiLogin.jws?wsdl';
+my $scriptURI = 'http://XXXXXXXXXXXXXX:8080/sakai-axis/SakaiScript.jws?wsdl';
+
+my $file = 'data/users.csv';
+
+############## DO NOT EDIT BELOW HERE ###############
+
+
+
+
+
+
+
+
+#START
+print "\n";
 
 my $loginsoap = SOAP::Lite
 -> proxy($loginURI)
@@ -15,12 +48,6 @@ my $loginsoap = SOAP::Lite
 
 my $scriptsoap = SOAP::Lite
 -> proxy($scriptURI)
--> uri($scriptURI);
-
-
-
-#START
-print "\n";
 
 #get session
 my $session = $loginsoap->login($user, $password)->result;
@@ -35,7 +62,8 @@ while (<FILE>) {
 
 	print "removing user: " . $user . "...";
 	
-	my $result = $scriptsoap->removeUser($session, $user)->result;
+	#uncomment this to actually add the user, currently it just tests.
+	#my $result = $scriptsoap->removeUser($session, $user)->result;
 	
 	print $result . "\n";
 }
