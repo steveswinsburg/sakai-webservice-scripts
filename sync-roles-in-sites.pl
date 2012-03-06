@@ -24,29 +24,25 @@ use SOAP::Lite;
 ##################### EDIT HERE #####################
 
 my $user = 'admin';
-my $password = 'XXXXXXXXXXXXX';
+my $password = 'XXXXXXXXX';
 
-my $loginURI = 'http://XXXXXXXXXXXXX:8080/sakai-axis/SakaiLogin.jws?wsdl';
+my $loginURI = 'http://XXXXXXXXXXXXXX:8080/sakai-axis/SakaiLogin.jws?wsdl';
 my $scriptURI = 'http://XXXXXXXXXXXXXX:8080/sakai-axis/SakaiScript.jws?wsdl';
 
 my $templateSite = '!site.template';
 my @toSites = (
-"/site/05326ef9-9e64-4dd9-abab-19fa06cb5890",                                                                                                                                            
-"/site/Social _ Ethical Issues",                                                                             
-"/site/f0d1e341-b10e-4d02-805f-af311572dd7d",                                                                
-"/site/a142dac9-ab02-4102-8037-372001d744f6",                                                                                                                                                            
-"/site/76643474-ca4e-4779-87c2-849394e5b8e7",                                                                
-"/site/e8e90e44-4c0f-4dd5-998e-cbcc8dc7e78c",                                                                
-"/site/e4f3d17d-cdaf-4f0b-a093-8f5689851ce1",                                                                
-"/site/47fa2e55-3e53-4306-a6ca-2016825e9381",                                                                
-"/site/005d00b9-c40b-4670-9884-31def5d5860c",                                                                
-"/site/7118fd8c-78f1-4b2a-862e-dbf9819060c4",                                                                
-"/site/3203a720-6e0d-44e1-b5e1-24a5cd190410",                                                                
-"/site/900244b0-a4bb-43c9-9894-d7d2b79be4a6"
+"/site/0033eee4-2cc3-4024-883f-98bb07bc2d29",
+"/site/00444d19-2c66-4696-9da3-81ffadd830c3",
+"/site/0044ae5e-7de5-4bd7-b21a-afd71b9caa83",
+"/site/fff8a3bc-8046-4ebc-00c6-59ac16fa0d63"
 );
 
-my @roles = ("access", "maintain", "readonly", "privileged");
-
+my %roles = (
+	access => 'Can read most contents and revise some contents as granted by the site maintainer.',
+	maintain => 'Can read contents, revise, add, and delete both contents and participants in this site. Maintainers can do almost anything to this site, including deleting this site, remove other maintainers, and updating permissions for each tool.',
+	contributor => 'Can read, revise, add, and delete most contents as granted by the site maintainer.',
+	observer => 'Can read contents only. The least privilege.'
+);
 
 ############## DO NOT EDIT BELOW HERE ###############
 
@@ -76,9 +72,11 @@ print "session is: " . $session . "\n";
 foreach $site(@toSites) {
 	print "processing site: " . $site . "\n";
 	
-	foreach $role(@roles) {
+	for my $role ( keys %roles ) {
+        my $role_desc = $roles{$role};
+   
 		print "\t synchronising role: " . $role . "...";
-		my $result = $scriptsoap->copyRole($session, $templateSite, $site, $role)->result;
+		my $result = $scriptsoap->copyRole($session, $templateSite, $site, $role, $role_desc)->result;
 		print $result . "\n";
 	}
 }
